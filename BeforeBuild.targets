@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Sets the NETxx symbol for current target framework, and remove all previously set NETyy symbols -->
+    <ErrorReport Condition=" $(DefineConstants.Contains('NET'))">Don't define your own NET constants</ErrorReport>
+    <DefineConstants Condition=" !$(DefineConstants.Contains(';NET')) ">$(DefineConstants);$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</DefineConstants>
+    <DefineConstants Condition=" $(DefineConstants.Contains(';NET')) ">$(DefineConstants.Remove($(DefineConstants.LastIndexOf(";NET"))));$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</DefineConstants>
+  </PropertyGroup>
+  <!-- Make custom $(SomeName), to use in AfterBuild.targets. Like $(PubDirectory) = C:\pub\$(FrameworkVersion)\$(ProjectName)\ -->
+  <Target Name="DummyTarget" />
+</Project>

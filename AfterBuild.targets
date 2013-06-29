@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="SignBuild" AfterTargets="AfterBuild" BeforeTargets="CopyToPub" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " >
+    <SignFile SigningTarget="$(TargetPath)" CertificateThumbprint="be f2 50 c0 4f f7 6a c9 de 53 58 75 e6 17 31 19 36 5d 34 74" TimestampUrl="http://timestamp.verisign.com/scripts/timstamp.dll" />
+  </Target>
+  <Target Name="CopyToPub" AfterTargets="AfterBuild" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " >
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="c:\pub\$(TargetFrameworkVersion)\$(ProjectName)" />
+  </Target>
+</Project>
