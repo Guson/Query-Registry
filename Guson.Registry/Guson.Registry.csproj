@@ -104,8 +104,13 @@
     <Compile Include="ResultItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="doc\ErrorItem.cd" />
+    <None Include="doc\FilterItem.cd" />
+    <None Include="doc\ItemCollection.cd" />
     <None Include="doc\OpenRegistryKey.cd" />
+    <None Include="doc\QueryItem.cd" />
     <None Include="doc\QueryRegistryKey.cd" />
+    <None Include="doc\ResultItem.cd" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\RegisterKeyItem.xaml">

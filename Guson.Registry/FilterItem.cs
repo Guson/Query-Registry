@@ -10,6 +10,10 @@ namespace Guson.Registry
     using System.Diagnostics.Contracts;
 
     /// <summary>Immutable Value Class. Definition for filter items in <see cref="QueryRegistryKey"/>.</summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\FilterItem.png" alt="FilterItem Class Diagram" /></p>
+    /// </remarks>  
     public class FilterItem
     {
         #region Constructors

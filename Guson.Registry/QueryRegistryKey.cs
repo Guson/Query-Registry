@@ -684,6 +684,8 @@ namespace Guson.Registry
         #endregion
 
         #region Add items
+        /// <summary>Add an error item.</summary>
+        /// <param name="item">The item to add.</param>
         private void AddErrorItem(ErrorItem item)
         {
             if (this.error != null)
@@ -692,6 +694,8 @@ namespace Guson.Registry
             }
         }
 
+        /// <summary>Add an result item.</summary>
+        /// <param name="item">The item to add.</param>
         private void AddResultItem(ResultItem item)
         {
             if (this.result != null)

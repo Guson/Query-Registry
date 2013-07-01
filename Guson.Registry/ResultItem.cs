@@ -11,6 +11,10 @@ namespace Guson.Registry
     using Microsoft.Win32;
 
     /// <summary>Immutable Value Class. Definition for items in <see cref="QueryRegistryKey.Result"/>.</summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\ResultItem.png" alt="ResultItem Class Diagram" /></p>
+    /// </remarks>  
     public class ResultItem
     {
         #region Constructors

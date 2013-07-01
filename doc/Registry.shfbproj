@@ -88,6 +88,28 @@
       <AlternateText>Open Registry Key</AlternateText>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\QueryItem.png">
+      <ImageId>QueryItem</ImageId>
+      <AlternateText>Query Item</AlternateText>
+    </Content>
+    <Content Include="images\ItemCollection.png">
+      <ImageId>ItemCollection</ImageId>
+      <AlternateText>Item Collection</AlternateText>
+    </Content>
+    <Content Include="images\FilterItem.png">
+      <ImageId>FilterItem</ImageId>
+      <AlternateText>Filter Item</AlternateText>
+    </Content>
+    <Content Include="images\ErrorItem.png">
+      <ImageId>ErrorItem</ImageId>
+      <AlternateText>Error Item</AlternateText>
+    </Content>
+    <Content Include="images\ResultItem.png">
+      <ImageId>ResultItem</ImageId>
+      <AlternateText>Result Item</AlternateText>
+    </Content>
+  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>

@@ -11,6 +11,10 @@ namespace Guson.Registry
     using Microsoft.Win32;
 
     /// <summary>Immutable Value Class. Definition for items in <see cref="QueryRegistryKey.Error"/></summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\ErrorItem.png" alt="ErrorItem Class Diagram" /></p>
+    /// </remarks>    
     public class ErrorItem
     {
         #region Constructors
@@ -26,8 +30,6 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(name), "name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(ex != null, "ex cannot be null");
-            ////Contract.Requires<ArgumentNullException>(ex.InnerException != null, "ex.InnerException cannot be null");
-            ////Contract.Requires<ArgumentNullException>(ex.InnerException.Message != null, "ex.InnerException.Message cannot be null");
             this.KeyName = key.Name;
             this.Name = name;
             this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);
@@ -43,8 +45,6 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(keyName), "keyName cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(name), "name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(ex != null, "ex cannot be null");
-            ////Contract.Requires<ArgumentNullException>(ex.InnerException != null, "ex.InnerException cannot be null");
-            ////Contract.Requires<ArgumentNullException>(ex.InnerException.Message != null, "ex.InnerException.Message cannot be null");
             this.KeyName = keyName;
             this.Name = name;
             this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);

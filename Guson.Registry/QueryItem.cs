@@ -10,6 +10,10 @@ namespace Guson.Registry
     using System.Diagnostics.Contracts;
 
     /// <summary>Immutable Value Class. Definition for a query or exclude item in <see cref="QueryRegistryKey"/>.</summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\QueryItem.png" alt="QueryItem Class Diagram" /></p>
+    /// </remarks>  
     public class QueryItem
     {
         #region Constructors
