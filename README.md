@@ -18,3 +18,7 @@ The [ItemCollection.cs] encapsulate the List class, and is used in the item clas
 Controls
 ========
 The [RootKeyComboBox] is a combo box for the RootKeyType enum. The [RegisterKeyItem] is a user control with a root key and key name.
+
+Code documentation
+==================
+The XML documentation is used by a Sandcastle Help File Bilder.
