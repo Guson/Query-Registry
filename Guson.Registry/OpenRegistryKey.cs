@@ -8,6 +8,7 @@ namespace Guson.Registry
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using Microsoft.Win32;
@@ -20,50 +21,49 @@ namespace Guson.Registry
     /// <p><img src="..\images\OpenRegistryKey.png" alt="OpenRegistryKey Class Diagram" /></p>
     /// References:
     /// <ul>
-    ///   <li>ToDo.</li>
+    ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#Root_keys">Root_keys</see>.</li>
     /// </ul>
     /// </remarks>
     public static class OpenRegistryKey
     {
         /// <summary>Immutable dictionary of root key names.</summary>
-        /// <remarks>Change to a IDictionary implementation <see href="http://stackoverflow.com/questions/313324/declare-a-dictionary-inside-a-static-class"/>.</remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification="Is semi immutable, change later.")]
-        public static readonly Dictionary<string, RootKeyType> RootKeys = new Dictionary<string, RootKeyType>()
-        {
-            { "HKEY_LOCAL_MACHINE", RootKeyType.HKLM },
-            { "HKEY_CURRENT_CONFIG", RootKeyType.HKCC },
-            { "HKEY_CLASSES_ROOT", RootKeyType.HKCR },
-            { "HKEY_USERS", RootKeyType.HKU },
-            { "HKEY_CURRENT_USER", RootKeyType.HKCU },
-            { "HKEY_PERFORMANCE_DATA", RootKeyType.HKPD },
-            { "HKLM", RootKeyType.HKLM },
-            { "HKCC", RootKeyType.HKCC },
-            { "HKCR", RootKeyType.HKCR },
-            { "HKU", RootKeyType.HKU },
-            { "HKCU", RootKeyType.HKCU },
-            { "HKPD", RootKeyType.HKPD }
-        };
+        public static readonly ReadOnlyDictionary<string, RootKeyType> RootKeys = new ReadOnlyDictionary<string, RootKeyType>(
+                new Dictionary<string, RootKeyType>()
+                {
+                    { "HKEY_LOCAL_MACHINE", RootKeyType.HKLM },
+                    { "HKEY_CURRENT_CONFIG", RootKeyType.HKCC },
+                    { "HKEY_CLASSES_ROOT", RootKeyType.HKCR },
+                    { "HKEY_USERS", RootKeyType.HKU },
+                    { "HKEY_CURRENT_USER", RootKeyType.HKCU },
+                    { "HKEY_PERFORMANCE_DATA", RootKeyType.HKPD },
+                    { "HKLM", RootKeyType.HKLM },
+                    { "HKCC", RootKeyType.HKCC },
+                    { "HKCR", RootKeyType.HKCR },
+                    { "HKU", RootKeyType.HKU },
+                    { "HKCU", RootKeyType.HKCU },
+                    { "HKPD", RootKeyType.HKPD }
+                });
 
         /// <summary>Definition of Windows root registry keys(Hives).</summary>
         /// <see href="http://en.wikipedia.org/wiki/Windows_Registry#Root_keys"/>
         public enum RootKeyType
         {
-            /// <summary>The HKEY_LOCAL_MACHINE (HKLM)</summary>
+            /// <summary>The HKEY_LOCAL_MACHINE (<c>HKLM</c>)</summary>
             HKLM,
 
-            /// <summary>The HKEY_CURRENT_CONFIG (HKCC)</summary>
+            /// <summary>The HKEY_CURRENT_CONFIG (<c>HKCC</c>)</summary>
             HKCC,
 
-            /// <summary>The HKEY_CLASSES_ROOT (HKCR)</summary>
+            /// <summary>The HKEY_CLASSES_ROOT (<c>HKCR</c>)</summary>
             HKCR,
 
-            /// <summary>The HKEY_USERS (HKU)</summary>
+            /// <summary>The HKEY_USERS (<c>HKU</c>)</summary>
             HKU,
 
-            /// <summary>The HKEY_CURRENT_USER (HKCU)</summary>
+            /// <summary>The HKEY_CURRENT_USER (<c>HKCU</c>)</summary>
             HKCU,
 
-            /// <summary>The HKEY_PERFORMANCE_DATA (HKPD)</summary>
+            /// <summary>The HKEY_PERFORMANCE_DATA (<c>HKPD</c>)</summary>
             HKPD
         }
 

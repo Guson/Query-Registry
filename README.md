@@ -20,9 +20,11 @@ The _RootKeyComboBox_ is a combo box for the _RootKeyType_ enum. The _RegisterKe
 The XML documentation is used by a Sandcastle Help File Bulder project in the doc directory.
 
 ## Task list
-- [ ] Add a [ContractInvariantMethod] to _ItemCollection.cs_, to require non null items.
+- [x] Add a [ContractInvariantMethod] to _ItemCollection.cs_, to require non null items.
 - [ ] Clean unused/unnecessary code contacts
 - [ ] Test the user controls
 - [ ] Add NUnit test
 - [ ] Add class diagram with the main classes
 - [ ] Add class diagram for all help classes
+- [ ] Add $(PubDirectory) in _BeforeBuild.targets_
+- [x] Add a immutable _ReadOnlyDictionary<TKey, TValue>_ class

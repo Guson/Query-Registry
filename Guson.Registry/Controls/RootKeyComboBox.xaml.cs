@@ -23,8 +23,8 @@ namespace Guson.Registry.Controls
         /// <summary>Gets or sets root key.</summary>
         public OpenRegistryKey.RootKeyType RootKey
         {
-            get { return GetRootKey(); }
-            set { SetRootKey(value); }
+            get { return this.GetRootKey(); }
+            set { this.SetRootKey(value); }
         }
 
         /// <summary>Gets the root key.</summary>

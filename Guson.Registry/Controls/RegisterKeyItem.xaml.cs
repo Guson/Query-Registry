@@ -17,10 +17,10 @@ namespace Guson.Registry.Controls
     /// <example>
     /// Add user control
     /// <![CDATA[
-    ///   <WrapPanel>
-    ///       <gr:RegisterKeyItem Width="400" HorizontalAlignment="Stretch" />
-    ///       <Image  Source="/image/new.png" Width="20" Height="20" Margin="2,2,2,2" HorizontalAlignment="Right" />
-    ///   </WrapPanel>
+    /// <WrapPanel>
+    ///     <gr:RegisterKeyItem Width="400" HorizontalAlignment="Stretch" />
+    ///     <Image  Source="/image/new.png" Width="20" Height="20" Margin="2,2,2,2" HorizontalAlignment="Right" />
+    /// </WrapPanel>
     /// ]]>
     /// </example>
     public partial class RegisterKeyItem : UserControl
@@ -35,7 +35,11 @@ namespace Guson.Registry.Controls
         /// <summary>Gets or sets query item.</summary>
         public QueryItem Item
         {
-            get { return new QueryItem(this.RootKey, this.KeyName); }
+            get
+            {
+                return new QueryItem(this.RootKey, this.KeyName);
+            }
+
             set
             {
                 Contract.Requires(value != null);
@@ -46,14 +50,14 @@ namespace Guson.Registry.Controls
         /// <summary>Gets or sets root key.</summary>
         public OpenRegistryKey.RootKeyType RootKey
         {
-            get { return GetRootKey(); }
-            set { SetRootKey(value); }
+            get { return this.GetRootKey(); }
+            set { this.SetRootKey(value); }
         }
 
         /// <summary>Gets or sets key name.</summary>
         public string KeyName
         {
-            get { return keyName.Text; }
+            get { return this.keyName.Text; }
             set { this.SetKeyName(value); }
         }
         #endregion
@@ -95,9 +99,9 @@ namespace Guson.Registry.Controls
         /// <returns>The key name.</returns>
         private string GetKeyName()
         {
-            if (keyName != null && keyName.Text != null)
+            if (this.keyName != null && this.keyName.Text != null)
             {
-                return keyName.Text;
+                return this.keyName.Text;
             }
             else
             {

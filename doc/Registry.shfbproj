@@ -110,6 +110,12 @@
       <AlternateText>Result Item</AlternateText>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\ReadOnlyDictionary.png">
+      <ImageId>ReadOnlyDictionary</ImageId>
+      <AlternateText>Read Only Dictionary</AlternateText>
+    </Content>
+  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
 </Project>

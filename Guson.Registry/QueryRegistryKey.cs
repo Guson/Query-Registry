@@ -22,14 +22,16 @@ namespace Guson.Registry
     /// <p><img src="..\images\QueryRegistryKey.png" alt="QueryRegistryKey Class Diagram" /></p>
     /// References:
     /// <ul>
-    ///   <li>ToDo.</li>
+    ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#.REG_files">.REG files (also known as Registration entries)</see></li>
+    ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#cite_ref-4">List of standard registry value types</see></li>
+    ///   <li><see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724884%28v=vs.85%29.aspx">Registry Value Types</see></li>
+    ///   <li><see href="http://msdn.microsoft.com/en-us/library/microsoft.win32.registryvaluekind.aspx">RegistryValueKind Enumeration</see></li>
     /// </ul>
     /// </remarks>
     public class QueryRegistryKey
     {
         #region Private Fields
         /// <summary>Exclude list, containing keys to ignore below <c>key</c> or <c>querys</c> parameters.</summary>
-        /// <remarks>ToDo: Change List to Collection. CA1002</remarks>
         private ItemCollection<QueryItem> exclude = new ItemCollection<QueryItem>();
 
         /// <summary>Filter list, containing value name and value data for filtering.</summary>
@@ -64,8 +66,8 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
             Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
             this.Query(key, exclude, filter);
         }
 
@@ -79,9 +81,9 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(query != null, "querys cannot be null");
             Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
             Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null"); 
             this.Query(query, exclude, filter);
         }
         #endregion
@@ -102,8 +104,6 @@ namespace Guson.Registry
         {
             get
             {
-                ////Contract.Ensures(Contract.Result<IList<ResultItem>>() != null);
-                ////Contract.Ensures(Contract.ForAll(Contract.Result<IList<ResultItem>>(), i => i != null));
                 return this.result;
             }
         }
@@ -123,8 +123,6 @@ namespace Guson.Registry
         {
             get
             {
-                ////Contract.Ensures(Contract.Result<IList<ErrorItem>>() != null);
-                ////Contract.Ensures(Contract.ForAll(Contract.Result<IList<ErrorItem>>(), i => i != null));
                 return this.error;
             }
         }
@@ -150,8 +148,8 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
             Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
             this.exclude = exclude;
             this.filter = filter;
             this.QueryRegistry(key);
@@ -167,9 +165,9 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(query != null, "querys cannot be null");
             Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
             Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentNullException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
+            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
             this.exclude = exclude;
             this.filter = filter;
             foreach (var item in query)
@@ -187,7 +185,7 @@ namespace Guson.Registry
                         }
                         else
                         {
-                            AddErrorItem(new ErrorItem(keyName, "Query(querys, exclude, filter);", new Exception(string.Format(CultureInfo.CurrentCulture, "\"KeyName\"={0}, don't exist in \"RootKey\"={1}", keyName, rootKey))));
+                            this.AddErrorItem(new ErrorItem(keyName, "Query(querys, exclude, filter);", new Exception(string.Format(CultureInfo.CurrentCulture, "\"KeyName\"={0}, don't exist in \"RootKey\"={1}", keyName, rootKey))));
                         }
                     }
                 }
@@ -196,12 +194,11 @@ namespace Guson.Registry
 
         /// <summary>Export the result as Microsoft Registry Editor Export.</summary>
         /// <returns>A list formatted as a Registration Entries (<c>.reg</c>) file.</returns>
-        /// <see href="http://en.wikipedia.org/wiki/Windows_Registry#.REG_files"/>
+        /// <see href="http://en.wikipedia.org/wiki/Windows_Registry#.REG_files">.REG files (also known as Registration entries)</see>
         /// <remarks>Export by <c>regedit.exe</c> wraps hex lines at col 78-80, but is not needed. Only for readability.</remarks>
         public IList<string> Export()
         {
             Contract.Ensures(Contract.Result<IList<string>>() != null);
-            ////Contract.Ensures(Contract.ForAll(Contract.Result<IList<string>>(), i => i != null));
             IList<string> export = new List<string>();
             if (this.result != null && this.result.Count > 0)
             {
@@ -275,7 +272,7 @@ namespace Guson.Registry
                     }
                     catch (Exception ex)
                     {
-                        AddErrorItem(new ErrorItem(item.KeyName, valueName, ex));
+                        this.AddErrorItem(new ErrorItem(item.KeyName, valueName, ex));
                         if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
                         {
                             throw;
@@ -296,14 +293,8 @@ namespace Guson.Registry
         [ContractInvariantMethod]
         private void ContractInvariant()
         {
-            ////Contract.Invariant(this.exclude != null, "Member exclude cannot be null");
-            ////Contract.Invariant(this.filter != null, "Member filter cannot be null");
             ////Contract.Invariant(this.result != null, "Member result cannot be null");
             ////Contract.Invariant(this.error != null, "Member error cannot be null");
-            ////Contract.Invariant(Contract.ForAll(this.exclude, i => i != null), "The items for member querys cannot be null");
-            ////Contract.Invariant(Contract.ForAll(this.filter, i => i != null), "The items for member filter cannot be null");
-            ////Contract.Invariant(Contract.ForAll(this.result, i => i != null), "The items for member result cannot be null");
-            ////Contract.Invariant(Contract.ForAll(this.error, i => i != null), "The items for member error cannot be null");
         }
 
         /// <summary>Test if key has value name.</summary>
@@ -381,7 +372,7 @@ namespace Guson.Registry
             }
             catch (Exception ex)
             {
-                AddErrorItem(new ErrorItem(key, "QueryRegistryValues(key);", ex));
+                this.AddErrorItem(new ErrorItem(key, "QueryRegistryValues(key);", ex));
                 if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
                 {
                     throw;
@@ -418,7 +409,7 @@ namespace Guson.Registry
                                         {
                                             if (string.IsNullOrEmpty(filterData) || string.IsNullOrEmpty(filterData))
                                             {
-                                                AddResultItem(new ResultItem(keyName, valueName, valueData));
+                                                this.AddResultItem(new ResultItem(keyName, valueName, valueData));
                                             }
                                         }
                                     }
@@ -428,13 +419,13 @@ namespace Guson.Registry
                                     string valueData = this.FormatValueData(key, valueName);
                                     if (valueData != null)
                                     {
-                                        AddResultItem(new ResultItem(keyName, valueName, valueData));
+                                        this.AddResultItem(new ResultItem(keyName, valueName, valueData));
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                AddErrorItem(new ErrorItem(keyName, valueName, ex));
+                                this.AddErrorItem(new ErrorItem(keyName, valueName, ex));
                                 if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
                                 {
                                     throw;
@@ -457,7 +448,7 @@ namespace Guson.Registry
         /// <para>
         /// References:
         /// <ul>
-        ///   <li><see ref="http://en.wikipedia.org/wiki/Windows_Registry#.REG_files">.REG files (also known as Registration entries)</see></li>
+        ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#.REG_files">.REG files (also known as Registration entries)</see></li>
         ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#cite_ref-4">List of standard registry value types</see></li>
         ///   <li><see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724884%28v=vs.85%29.aspx">Registry Value Types</see></li>
         ///   <li><see href="http://msdn.microsoft.com/en-us/library/microsoft.win32.registryvaluekind.aspx">RegistryValueKind Enumeration</see></li>
@@ -584,7 +575,12 @@ namespace Guson.Registry
                         hex += ",";
                     }
 
-                    hex += string.Format(CultureInfo.InvariantCulture, "{0:x2},00", (byte)line[j]);
+                    string item = string.Format(CultureInfo.InvariantCulture, "{0:x2},00", (byte)line[j]);
+                    if (item != null)
+                    {
+                        hex += item;
+                    }
+
                 }
 
                 hex += ",00,00";
@@ -637,7 +633,7 @@ namespace Guson.Registry
             }
             catch (Exception ex)
             {
-                AddErrorItem(new ErrorItem(key, "QueryRegistrySubKeys(key);", ex));
+                this.AddErrorItem(new ErrorItem(key, "QueryRegistrySubKeys(key);", ex));
                 if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
                 {
                     throw;
@@ -669,7 +665,7 @@ namespace Guson.Registry
                                 }
                                 catch (Exception ex)
                                 {
-                                    AddErrorItem(new ErrorItem(key, subKeyName, ex));
+                                    this.AddErrorItem(new ErrorItem(key, subKeyName, ex));
                                     if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
                                     {
                                         throw;
@@ -688,7 +684,7 @@ namespace Guson.Registry
         /// <param name="item">The item to add.</param>
         private void AddErrorItem(ErrorItem item)
         {
-            if (this.error != null)
+            if (this.error != null && item != null)
             {
                 this.error.Add(item);
             }
@@ -698,7 +694,7 @@ namespace Guson.Registry
         /// <param name="item">The item to add.</param>
         private void AddResultItem(ResultItem item)
         {
-            if (this.result != null)
+            if (this.result != null && item != null)
             {
                 this.result.Add(item);
             }
