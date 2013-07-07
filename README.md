@@ -24,7 +24,7 @@ The XML documentation is used by a Sandcastle Help File Bulder project in the do
 - [ ] Clean unused/unnecessary code contacts
 - [ ] Test the user controls
 - [ ] Add NUnit test
-- [ ] Add class diagram with the main classes
-- [ ] Add class diagram for all help classes
+- [x] Add class diagram with the main classes
+- [x] Add class diagram for all help classes
 - [ ] Add $(PubDirectory) in _BeforeBuild.targets_
 - [x] Add a immutable _ReadOnlyDictionary<TKey, TValue>_ class

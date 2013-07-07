@@ -109,10 +109,14 @@
     <None Include="doc\FilterItem.cd" />
     <None Include="doc\ItemCollection.cd" />
     <None Include="doc\OpenRegistryKey.cd" />
+    <None Include="doc\OpenRegistryKeyModel.cd" />
     <None Include="doc\QueryItem.cd" />
     <None Include="doc\QueryRegistryKey.cd" />
+    <None Include="doc\QueryRegistryKeyModel.cd" />
     <None Include="doc\ReadOnlyDictionary.cd" />
+    <None Include="doc\RegisterKeyItem.cd" />
     <None Include="doc\ResultItem.cd" />
+    <None Include="doc\RootKeyComboBox.cd" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\RegisterKeyItem.xaml">

@@ -19,6 +19,8 @@ namespace Guson.Registry
     /// <remarks>
     /// Class Diagram:
     /// <p><img src="..\images\OpenRegistryKey.png" alt="OpenRegistryKey Class Diagram" /></p>
+    /// Model Diagram:
+    /// <p><img src="..\images\OpenRegistryKeyModel.png" alt="OpenRegistryKey Class Diagram" /></p>
     /// References:
     /// <ul>
     ///   <li><see href="http://en.wikipedia.org/wiki/Windows_Registry#Root_keys">Root_keys</see>.</li>

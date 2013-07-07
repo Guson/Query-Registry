@@ -19,7 +19,7 @@ namespace Guson.Registry
     /////// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
     /////// <remarks>
     /////// Class Diagram:
-    /////// <p><img src="..\images\ReadOnlyDictionaryNET45.png" alt="ReadOnlyDictionary Class Diagram" /></p>
+    /////// <p><img src="..\images\ReadOnlyDictionary.png" alt="ReadOnlyDictionary Class Diagram" /></p>
     /////// References:
     /////// <ul>
     ///////   <li><see href="http://msdn.microsoft.com/en-us/library/hh136548.aspx">IReadOnlyDictionary&lt;TKey, TValue&gt; Interface</see>.</li>

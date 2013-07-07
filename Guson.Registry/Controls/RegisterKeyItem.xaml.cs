@@ -14,6 +14,10 @@ namespace Guson.Registry.Controls
     /// <summary>
     /// Interaction logic for RegisterKeyItem.xaml
     /// </summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\RegisterKeyItem.png" alt="RegisterKeyItem Class Diagram" /></p>
+    /// </remarks>
     /// <example>
     /// Add user control
     /// <![CDATA[

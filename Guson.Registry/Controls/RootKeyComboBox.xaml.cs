@@ -12,6 +12,10 @@ namespace Guson.Registry.Controls
     /// <summary>
     /// Interaction logic for RootKeyComboBox.xaml
     /// </summary>
+    /// <remarks>
+    /// Class Diagram:
+    /// <p><img src="..\images\RootKeyComboBox.png" alt="RootKeyComboBox Class Diagram" /></p>
+    /// </remarks>
     public partial class RootKeyComboBox : UserControl
     {
         /// <summary>Initializes a new instance of the <see cref="RootKeyComboBox"/> class.</summary>
