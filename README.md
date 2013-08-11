@@ -23,7 +23,7 @@ The XML documentation is used by a Sandcastle Help File Builder project in the d
 - [x] Add a [ContractInvariantMethod] to _ItemCollection.cs_, to require non null items.
 - [x] Clean unused/unnecessary code contacts
 - [x] Fix code analysis warnings
-- [ ] Test the user controls
+- [ ] Add unit test and test the user controls
 - [ ] Add NUnit test
 - [x] Add class diagram with the main classes
 - [x] Add class diagram for all help classes
