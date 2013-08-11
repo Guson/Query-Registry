@@ -27,10 +27,14 @@ namespace Guson.Registry
         public ResultItem(RegistryKey key, string valueName, string valueData)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(valueName != null, "valueName cannot be null");
             Contract.Requires<ArgumentNullException>(valueData != null, "valueData cannot be null");
-            this.KeyName = key.Name;
+            if (key != null && !string.IsNullOrWhiteSpace(key.Name))
+            {
+                this.KeyName = key.Name;
+            }
+
             this.ValueName = valueName;
             this.ValueData = valueData;
         }

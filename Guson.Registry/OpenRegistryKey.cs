@@ -8,7 +8,6 @@ namespace Guson.Registry
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using Microsoft.Win32;
@@ -45,29 +44,6 @@ namespace Guson.Registry
                     { "HKCU", RootKeyType.HKCU },
                     { "HKPD", RootKeyType.HKPD }
                 });
-
-        /// <summary>Definition of Windows root registry keys(Hives).</summary>
-        /// <see href="http://en.wikipedia.org/wiki/Windows_Registry#Root_keys"/>
-        public enum RootKeyType
-        {
-            /// <summary>The HKEY_LOCAL_MACHINE (<c>HKLM</c>)</summary>
-            HKLM,
-
-            /// <summary>The HKEY_CURRENT_CONFIG (<c>HKCC</c>)</summary>
-            HKCC,
-
-            /// <summary>The HKEY_CLASSES_ROOT (<c>HKCR</c>)</summary>
-            HKCR,
-
-            /// <summary>The HKEY_USERS (<c>HKU</c>)</summary>
-            HKU,
-
-            /// <summary>The HKEY_CURRENT_USER (<c>HKCU</c>)</summary>
-            HKCU,
-
-            /// <summary>The HKEY_PERFORMANCE_DATA (<c>HKPD</c>)</summary>
-            HKPD
-        }
 
         #region Public Static Methods
         /// <summary>Create a Registry key.</summary>
@@ -153,21 +129,25 @@ namespace Guson.Registry
         public static RootKeyType GetRootKeyType(RegistryKey key)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
-            string keyName = key.Name;
-            foreach (var rootKey in RootKeys)
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            string keyName = string.Empty;
+            if (key != null && !string.IsNullOrWhiteSpace(key.Name))
             {
-                string rootKeyName = rootKey.Key;
-                if (rootKeyName != null)
+                keyName = key.Name;
+                foreach (var rootKey in RootKeys)
                 {
-                    if (keyName.StartsWith(rootKeyName, StringComparison.CurrentCulture))
+                    string rootKeyName = rootKey.Key;
+                    if (rootKeyName != null)
                     {
-                        return rootKey.Value;
+                        if (keyName.StartsWith(rootKeyName, StringComparison.CurrentCulture))
+                        {
+                            return rootKey.Value;
+                        }
                     }
                 }
             }
 
-            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument key={0}, is not defined in the \"RootKeys\" dictionary.", key.Name));
+            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "The argument key={0}, is not defined in the \"RootKeys\" dictionary.", keyName));
         }
         #endregion
 

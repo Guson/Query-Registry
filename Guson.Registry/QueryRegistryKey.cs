@@ -8,6 +8,7 @@ namespace Guson.Registry
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
@@ -32,10 +33,10 @@ namespace Guson.Registry
     {
         #region Private Fields
         /// <summary>Exclude list, containing keys to ignore below <c>key</c> or <c>querys</c> parameters.</summary>
-        private ItemCollection<QueryItem> exclude = new ItemCollection<QueryItem>();
+        private Collection<QueryItem> exclude = new Collection<QueryItem>();
 
         /// <summary>Filter list, containing value name and value data for filtering.</summary>
-        private ItemCollection<FilterItem> filter = new ItemCollection<FilterItem>();
+        private Collection<FilterItem> filter = new Collection<FilterItem>();
 
         /// <summary>Result list, containing full key, value and data.</summary>
         private ItemCollection<ResultItem> result = new ItemCollection<ResultItem>();
@@ -51,40 +52,35 @@ namespace Guson.Registry
         public QueryRegistryKey(RegistryKey key)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             this.Query(key);
         }
 
         /// <summary>Initializes a new instance of the <see cref="QueryRegistryKey"/> class.</summary>
         /// <param name="key">The key to query.</param>
-        /// <param name="exclude">The keys to ignore, below <paramref name="key"/>.</param>
-        /// <param name="filter">Filter values and data.</param>
+        /// <param name="excludeCollection">The keys to ignore, below <paramref name="key"/>.</param>
+        /// <param name="filterCollection">Filter values and data.</param>
         /// <remarks>Query a register key, add result to <see cref="Result"/>.</remarks>
-        public QueryRegistryKey(RegistryKey key, ItemCollection<QueryItem> exclude, ItemCollection<FilterItem> filter)
+        public QueryRegistryKey(RegistryKey key, Collection<QueryItem> excludeCollection, Collection<FilterItem> filterCollection)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
-            Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
-            Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
-            this.Query(key, exclude, filter);
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(excludeCollection != null, "exclude cannot be null");
+            Contract.Requires<ArgumentNullException>(filterCollection != null, "filter cannot be null");
+            this.Query(key, excludeCollection, filterCollection);
         }
 
         /// <summary>Initializes a new instance of the <see cref="QueryRegistryKey"/> class.</summary>
-        /// <param name="query">The keys to query.</param>
-        /// <param name="exclude">The keys to ignore, below items in <paramref name="query"/>.</param>
-        /// <param name="filter">Filter values and data.</param>
+        /// <param name="queryCollection">The keys to query.</param>
+        /// <param name="excludeCollection">The keys to ignore, below items in <paramref name="queryCollection"/>.</param>
+        /// <param name="filterCollection">Filter values and data.</param>
         /// <remarks>Query a register key, add result to <see cref="Result"/>.</remarks>
-        public QueryRegistryKey(ItemCollection<QueryItem> query, ItemCollection<QueryItem> exclude, ItemCollection<FilterItem> filter)
+        public QueryRegistryKey(Collection<QueryItem> queryCollection, Collection<QueryItem> excludeCollection, Collection<FilterItem> filterCollection)
         {
-            Contract.Requires<ArgumentNullException>(query != null, "querys cannot be null");
-            Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
-            Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null"); 
-            this.Query(query, exclude, filter);
+            Contract.Requires<ArgumentNullException>(queryCollection != null, "querys cannot be null");
+            Contract.Requires<ArgumentNullException>(excludeCollection != null, "exclude cannot be null");
+            Contract.Requires<ArgumentNullException>(filterCollection != null, "filter cannot be null");
+            this.Query(queryCollection, excludeCollection, filterCollection);
         }
         #endregion
 
@@ -134,58 +130,96 @@ namespace Guson.Registry
         public void Query(RegistryKey key)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             this.QueryRegistry(key);
         }
 
         /// <summary>Query a register key, add result to <see cref="Result"/>, using a new <see cref="exclude"/> and new <see cref="filter"/>.</summary>
         /// <param name="key">The key to query.</param>
-        /// <param name="exclude">The keys to ignore, below <paramref name="key"/>.</param>
-        /// <param name="filter">The new filter for values and data.</param>
-        public void Query(RegistryKey key, ItemCollection<QueryItem> exclude, ItemCollection<FilterItem> filter)
+        /// <param name="excludeCollection">The keys to ignore, below <paramref name="key"/>.</param>
+        /// <param name="filterCollection">The new filter for values and data.</param>
+        public void Query(RegistryKey key, Collection<QueryItem> excludeCollection, Collection<FilterItem> filterCollection)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
-            Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
-            Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
-            this.exclude = exclude;
-            this.filter = filter;
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(excludeCollection != null, "exclude cannot be null");
+            Contract.Requires<ArgumentNullException>(filterCollection != null, "filter cannot be null");
+            if (this.exclude != null && excludeCollection != null && excludeCollection.Count > 0)
+            {
+                foreach (var item in excludeCollection)
+                {
+                    if (item != null)
+                    {
+                        this.exclude.Add(item);
+                    }
+                }
+            }
+
+            if (this.filter != null && filterCollection != null && filterCollection.Count > 0)
+            {
+                foreach (var item in filterCollection)
+                {
+                    if (item != null)
+                    {
+                        this.filter.Add(item);
+                    }
+                }
+            }
+
             this.QueryRegistry(key);
         }
 
         /// <summary>Query a register key list, add result to <see cref="Result"/>, using a new <see cref="exclude"/> and new <see cref="filter"/>.</summary>
-        /// <param name="query">The keys to query.</param>
-        /// <param name="exclude">The keys to ignore, below items in <paramref name="query"/>.</param>
-        /// <param name="filter">Filter values and data.</param>
+        /// <param name="queryCollection">The keys to query.</param>
+        /// <param name="excludeCollection">The keys to ignore, below items in <paramref name="queryCollection"/>.</param>
+        /// <param name="filterCollection">Filter values and data.</param>
         /// <remarks>Query a register key, add result to <see cref="Result"/>.</remarks>
-        public void Query(ItemCollection<QueryItem> query, ItemCollection<QueryItem> exclude, ItemCollection<FilterItem> filter)
+        public void Query(Collection<QueryItem> queryCollection, Collection<QueryItem> excludeCollection, Collection<FilterItem> filterCollection)
         {
-            Contract.Requires<ArgumentNullException>(query != null, "querys cannot be null");
-            Contract.Requires<ArgumentNullException>(exclude != null, "exclude cannot be null");
-            Contract.Requires<ArgumentNullException>(filter != null, "filter cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(query, i => i != null), "querys items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(exclude, i => i != null), "exclude items cannot be null");
-            ////Contract.Requires<ArgumentException>(Contract.ForAll(filter, i => i != null), "filter items cannot be null");
-            this.exclude = exclude;
-            this.filter = filter;
-            foreach (var item in query)
+            Contract.Requires<ArgumentNullException>(queryCollection != null, "querys cannot be null");
+            Contract.Requires<ArgumentNullException>(excludeCollection != null, "exclude cannot be null");
+            Contract.Requires<ArgumentNullException>(filterCollection != null, "filter cannot be null");
+            if (this.exclude != null && excludeCollection != null && excludeCollection.Count > 0)
             {
-                if (item != null)
+                foreach (var item in excludeCollection)
                 {
-                    OpenRegistryKey.RootKeyType rootKey = item.RootKey;
-                    string keyName = item.KeyName;
-                    if (!string.IsNullOrWhiteSpace(keyName))
+                    if (item != null)
                     {
-                        RegistryKey key = OpenRegistryKey.New(rootKey, keyName);
-                        if (key != null && !string.IsNullOrWhiteSpace(key.Name))
+                        this.exclude.Add(item);
+                    }
+                }
+            }
+
+            if (this.filter != null && filterCollection != null && filterCollection.Count > 0)
+            {
+                foreach (var item in filterCollection)
+                {
+                    if (item != null)
+                    {
+                        this.filter.Add(item);
+                    }
+                }
+            }
+
+            if (queryCollection != null && queryCollection.Count > 0)
+            {
+                foreach (var item in queryCollection)
+                {
+                    if (item != null)
+                    {
+                        RootKeyType rootKey = item.RootKey;
+                        string keyName = item.KeyName;
+                        if (!string.IsNullOrWhiteSpace(keyName))
                         {
-                            this.QueryRegistry(key);
-                        }
-                        else
-                        {
-                            this.AddErrorItem(new ErrorItem(keyName, "Query(querys, exclude, filter);", new Exception(string.Format(CultureInfo.CurrentCulture, "\"KeyName\"={0}, don't exist in \"RootKey\"={1}", keyName, rootKey))));
+                            RegistryKey key = OpenRegistryKey.New(rootKey, keyName);
+                            if (key != null && !string.IsNullOrWhiteSpace(key.Name))
+                            {
+                                this.QueryRegistry(key);
+                            }
+                            else
+                            {
+                                this.AddErrorItem(new ErrorItem(keyName, "Query(querys, exclude, filter);", new ArgumentException(string.Format(CultureInfo.CurrentCulture, "\"KeyName\"={0}, don't exist in \"RootKey\"={1}", keyName, rootKey))));
+                            }
                         }
                     }
                 }
@@ -238,7 +272,7 @@ namespace Guson.Registry
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(valueName), "valueName cannot be null, empty or contain only white space");
             ItemCollection<ResultItem> newResult = new ItemCollection<ResultItem>();
-            if (this.result.Count > 0)
+            if (this.result != null && this.result.Count > 0)
             {
                 string keyName = string.Empty;
                 foreach (var item in this.result)
@@ -250,16 +284,18 @@ namespace Guson.Registry
                             if (keyName != item.KeyName)
                             {
                                 keyName = item.KeyName;
-                                if (keyName.Length > 0)
+                                int rootKeyLength = keyName.IndexOf('\\');
+                                if (keyName.Length >= 0 && rootKeyLength >= 0)
                                 {
-                                    string rootKey = keyName.Substring(0, keyName.IndexOf('\\'));
-                                    if (rootKey.Length > 0)
+                                    string rootKey = keyName.Substring(0, rootKeyLength);
+                                    int registryKeyLength = keyName.Length - rootKey.Length - 1;
+                                    if (rootKey.Length > 0 && registryKeyLength >= 0)
                                     {
-                                        string registryKey = keyName.Substring(rootKey.Length + 1, keyName.Length - rootKey.Length - 1);
+                                        string registryKey = keyName.Substring(rootKeyLength + 1, registryKeyLength);
                                         RegistryKey key = OpenRegistryKey.New(rootKey, registryKey);
-                                        if (key != null && this.HasValueName(valueName, key))
+                                        if (key != null && !string.IsNullOrWhiteSpace(key.Name) && HasValueName(valueName, key))
                                         {
-                                            string valueData = this.FormatValueData(key, valueName);
+                                            string valueData = FormatValueData(key, valueName);
                                             if (!string.IsNullOrEmpty(valueData))
                                             {
                                                 newResult.Add(new ResultItem(keyName, valueName, valueData));
@@ -289,23 +325,15 @@ namespace Guson.Registry
         #endregion
 
         #region Private Methods
-        /// <summary>Condition on an instance of the class.</summary>
-        [ContractInvariantMethod]
-        private void ContractInvariant()
-        {
-            ////Contract.Invariant(this.result != null, "Member result cannot be null");
-            ////Contract.Invariant(this.error != null, "Member error cannot be null");
-        }
-
         /// <summary>Test if key has value name.</summary>
         /// <param name="valueName">The value name, to find.</param>
         /// <param name="key">The key to use.</param>
         /// <returns>Returns <c>true</c> if <paramref name="key"/> contains <paramref name="valueName"/>, else <c>false</c>.</returns>
-        private bool HasValueName(string valueName, RegistryKey key)
+        private static bool HasValueName(string valueName, RegistryKey key)
         {
-            Contract.Requires(valueName != null);
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
+            Contract.Requires(valueName != null, "valueName cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(valueName), "valueName cannot be null, empty or contain only white space");
+            Contract.Requires(key != null, "key cannot be null");
             bool result = false;
             if (key.GetValue(valueName) != null)
             {
@@ -314,129 +342,6 @@ namespace Guson.Registry
 
             return result;
         }
-
-        /// <summary>Query registry for key.</summary>
-        /// <param name="key">The key to query.</param>
-        private void QueryRegistry(RegistryKey key)
-        {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
-            if (!this.KeyContainsExcludeItem(key))
-            {
-                this.QueryRegistryValues(key);
-                if (!string.IsNullOrWhiteSpace(key.Name))
-                {
-                    this.QueryRegistrySubKeys(key);
-                }
-            }
-        }
-
-        /// <summary>Test if registry key contains a ignore item.</summary>
-        /// <param name="key">The key to test.</param>
-        /// <returns>Returns <c>true</c> if key contains exclude item, else <c>false</c>.</returns>
-        private bool KeyContainsExcludeItem(RegistryKey key)
-        {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
-            if (this.exclude != null)
-            {
-                foreach (var item in this.exclude)
-                {
-                    if (item != null && item.KeyName != null)
-                    {
-                        if (!string.IsNullOrWhiteSpace(key.Name) && OpenRegistryKey.GetRootKeyType(key) == item.RootKey)
-                        {
-                            string keyName = key.Name;
-                            if (keyName != null && keyName.Contains(item.KeyName))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        #region Query Values
-        /// <summary>Query values for key.</summary>
-        /// <param name="key">The key to query.</param>
-        private void QueryRegistryValues(RegistryKey key)
-        {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
-            try
-            {
-                this.QueryValues(key);
-            }
-            catch (Exception ex)
-            {
-                this.AddErrorItem(new ErrorItem(key, "QueryRegistryValues(key);", ex));
-                if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
-                {
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>Query value names for registry key.</summary>
-        /// <param name="key">The registry key to query.</param>
-        private void QueryValues(RegistryKey key)
-        {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
-            string keyName = key.Name;
-            if (key.ValueCount > 0)
-            {
-                string[] valueNames = key.GetValueNames();
-                if (this.filter != null && this.result != null && valueNames != null)
-                {
-                    foreach (string valueName in valueNames)
-                    {
-                        if (valueName != null)
-                        {
-                            try
-                            {
-                                if (this.filter != null && this.filter.Count > 0)
-                                {
-                                    FilterItem filterItem = this.filter.Find(item => item.ValueName == valueName);
-                                    if (filterItem != null)
-                                    {
-                                        string filterData = filterItem.ValueData;
-                                        string valueData = this.FormatValueData(key, valueName);
-                                        if (filterData != null && valueData != null)
-                                        {
-                                            if (string.IsNullOrEmpty(filterData) || string.IsNullOrEmpty(filterData))
-                                            {
-                                                this.AddResultItem(new ResultItem(keyName, valueName, valueData));
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    string valueData = this.FormatValueData(key, valueName);
-                                    if (valueData != null)
-                                    {
-                                        this.AddResultItem(new ResultItem(keyName, valueName, valueData));
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                this.AddErrorItem(new ErrorItem(keyName, valueName, ex));
-                                if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
-                                {
-                                    throw;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
 
         #region Format value data
         /// <summary>Retrieves the data from the <paramref name="valueName"/> in <paramref name="key"/>.</summary>
@@ -488,7 +393,7 @@ namespace Guson.Registry
         /// </table>
         /// </para>
         /// </remarks>
-        private string FormatValueData(RegistryKey key, string valueName)
+        private static string FormatValueData(RegistryKey key, string valueName)
         {
             Contract.Requires(key != null);
             Contract.Requires(valueName != null);
@@ -502,7 +407,7 @@ namespace Guson.Registry
                 {
                     case RegistryValueKind.None:
                         byte[] none = (byte[])keyValue;
-                        text = string.Format(CultureInfo.InvariantCulture, "hex(0):{0}", this.ByteToHexList(none));
+                        text = string.Format(CultureInfo.InvariantCulture, "hex(0):{0}", ByteToHexList(none));
                         break;
                     case RegistryValueKind.Unknown:
                         throw new UnauthorizedAccessException("Unknown registry value kind.");
@@ -512,11 +417,11 @@ namespace Guson.Registry
                         break;
                     case RegistryValueKind.ExpandString:
                         string expand = (string)keyValue;
-                        text = string.Format(CultureInfo.InvariantCulture, "hex(2):{0}", this.StringToHexList(expand));
+                        text = string.Format(CultureInfo.InvariantCulture, "hex(2):{0}", StringToHexList(expand));
                         break;
                     case RegistryValueKind.Binary:
                         byte[] binary = (byte[])keyValue;
-                        text = string.Format(CultureInfo.InvariantCulture, "hex:{0}", this.ByteToHexList(binary));
+                        text = string.Format(CultureInfo.InvariantCulture, "hex:{0}", ByteToHexList(binary));
                         break;
                     case RegistryValueKind.DWord:
                         int dword = (int)keyValue;
@@ -524,11 +429,11 @@ namespace Guson.Registry
                         break;
                     case RegistryValueKind.MultiString:
                         string[] multi = (string[])keyValue;
-                        text = string.Format(CultureInfo.InvariantCulture, "hex(7):{0}", this.StringArrayToHexList(multi));
+                        text = string.Format(CultureInfo.InvariantCulture, "hex(7):{0}", StringArrayToHexList(multi));
                         break;
                     case RegistryValueKind.QWord:
                         byte[] qword = (byte[])keyValue;
-                        text = string.Format(CultureInfo.InvariantCulture, "hex(b):{0}", this.ByteToHexList(qword));
+                        text = string.Format(CultureInfo.InvariantCulture, "hex(b):{0}", ByteToHexList(qword));
                         break;
                     default:
                         throw new UnauthorizedAccessException("Default registry value kind.");
@@ -537,13 +442,12 @@ namespace Guson.Registry
 
             return text;
         }
-        #endregion
 
         #region Convert to Hex list
         /// <summary>Convert a byte array to a comma-delimited list of hexadecimal values.</summary>
         /// <param name="array">The byte array to convert.</param>
         /// <returns>A <c>string</c> with a comma-delimited list of hexadecimal values.</returns>
-        private string ByteToHexList(byte[] array)
+        private static string ByteToHexList(byte[] array)
         {
             Contract.Requires(array != null);
             Contract.Ensures(Contract.Result<string>() != null);
@@ -561,7 +465,7 @@ namespace Guson.Registry
         /// <summary>Convert a string to a comma-delimited list of hexadecimal values.</summary>
         /// <param name="line">The string to convert.</param>
         /// <returns>A <c>string</c> with a comma-delimited list of hexadecimal values.</returns>
-        private string StringToHexList(string line)
+        private static string StringToHexList(string line)
         {
             Contract.Requires(line != null);
             Contract.Ensures(Contract.Result<string>() != null);
@@ -580,7 +484,6 @@ namespace Guson.Registry
                     {
                         hex += item;
                     }
-
                 }
 
                 hex += ",00,00";
@@ -592,7 +495,7 @@ namespace Guson.Registry
         /// <summary>Convert a string array to a comma-delimited list of hexadecimal values.</summary>
         /// <param name="array">The string array to convert.</param>
         /// <returns>A <c>string</c> with a comma-delimited list of hexadecimal values.</returns>
-        private string StringArrayToHexList(string[] array)
+        private static string StringArrayToHexList(string[] array)
         {
             Contract.Requires(array != null);
             Contract.Ensures(Contract.Result<string>() != null);
@@ -609,7 +512,7 @@ namespace Guson.Registry
                     string line = array[i];
                     if (line != null)
                     {
-                        hex += this.StringToHexList(line);
+                        hex += StringToHexList(line);
                     }
                 }
 
@@ -619,14 +522,141 @@ namespace Guson.Registry
             return hex;
         }
         #endregion
+        #endregion
+
+        /// <summary>Query registry for key.</summary>
+        /// <param name="key">The key to query.</param>
+        private void QueryRegistry(RegistryKey key)
+        {
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            if (!this.KeyContainsExcludeItem(key))
+            {
+                this.QueryRegistryValues(key);
+                if (!string.IsNullOrWhiteSpace(key.Name))
+                {
+                    this.QueryRegistrySubKeys(key);
+                }
+            }
+        }
+
+        /// <summary>Test if registry key contains a ignore item.</summary>
+        /// <param name="key">The key to test.</param>
+        /// <returns>Returns <c>true</c> if key contains exclude item, else <c>false</c>.</returns>
+        private bool KeyContainsExcludeItem(RegistryKey key)
+        {
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            if (this.exclude != null)
+            {
+                foreach (var item in this.exclude)
+                {
+                    if (item != null && item.KeyName != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(key.Name) && OpenRegistryKey.GetRootKeyType(key) == item.RootKey)
+                        {
+                            string keyName = key.Name;
+                            if (keyName != null && keyName.Contains(item.KeyName))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        #region Query Values
+        /// <summary>Query values for key.</summary>
+        /// <param name="key">The key to query.</param>
+        private void QueryRegistryValues(RegistryKey key)
+        {
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            try
+            {
+                this.QueryValues(key);
+            }
+            catch (Exception ex)
+            {
+                this.AddErrorItem(new ErrorItem(key, "QueryRegistryValues(key);", ex));
+                if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>Query value names for registry key.</summary>
+        /// <param name="key">The registry key to query.</param>
+        private void QueryValues(RegistryKey key)
+        {
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            string keyName = key.Name;
+            ItemCollection<FilterItem> filterList = null;
+            if (this.filter != null)
+            {
+                filterList = new ItemCollection<FilterItem>(this.filter);
+            }
+
+            if (key.ValueCount > 0)
+            {
+                string[] valueNames = key.GetValueNames();
+                if (this.result != null && valueNames != null)
+                {
+                    foreach (string valueName in valueNames)
+                    {
+                        if (valueName != null)
+                        {
+                            try
+                            {
+                                if (filterList != null && filterList.Count > 0)
+                                {
+                                    FilterItem filterItem = filterList.Find(item => item.ValueName == valueName);
+                                    if (filterItem != null)
+                                    {
+                                        string filterData = filterItem.ValueData;
+                                        string valueData = FormatValueData(key, valueName);
+                                        if (filterData != null && string.IsNullOrEmpty(filterData) && valueData != null)
+                                        {
+                                            this.AddResultItem(new ResultItem(keyName, valueName, valueData));
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    string valueData = FormatValueData(key, valueName);
+                                    if (valueData != null)
+                                    {
+                                        this.AddResultItem(new ResultItem(keyName, valueName, valueData));
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                this.AddErrorItem(new ErrorItem(keyName, valueName, ex));
+                                if (!(ex is SecurityException || ex is ObjectDisposedException || ex is UnauthorizedAccessException || ex is IOException))
+                                {
+                                    throw;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
 
         #region Query SubKeys
         /// <summary>Query sub keys for key.</summary>
         /// <param name="key">The key to query.</param>
         private void QueryRegistrySubKeys(RegistryKey key)
         {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             try
             {
                 this.QuerySubKeys(key);
@@ -645,8 +675,8 @@ namespace Guson.Registry
         /// <param name="key">The registry key to query.</param>
         private void QuerySubKeys(RegistryKey key)
         {
-            Contract.Requires(key != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name));
+            Contract.Requires(key != null, "key cannot be null");
+            Contract.Requires(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             if (key.SubKeyCount > 0)
             {
                 string[] subKeyNames = key.GetSubKeyNames();
@@ -684,6 +714,7 @@ namespace Guson.Registry
         /// <param name="item">The item to add.</param>
         private void AddErrorItem(ErrorItem item)
         {
+            Contract.Requires(item != null, "item cannot be null");
             if (this.error != null && item != null)
             {
                 this.error.Add(item);
@@ -694,6 +725,7 @@ namespace Guson.Registry
         /// <param name="item">The item to add.</param>
         private void AddResultItem(ResultItem item)
         {
+            Contract.Requires(item != null, "item cannot be null");
             if (this.result != null && item != null)
             {
                 this.result.Add(item);

@@ -32,7 +32,6 @@ namespace Guson.Registry
     ////    return new ReadOnlyDictionary<TKey, TValue>(dictionary);
     ////}
 #else
-#endif
     /// <summary>Represents an immutable/read-only collection of key/value pairs.</summary>
     /// <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
@@ -68,7 +67,7 @@ namespace Guson.Registry
                 var valueQuery = this.GetQuery(key);
                 if (valueQuery.Count() == 0)
                 {
-                    throw new NullReferenceException("No value found for given key");
+                    return default(TValue);
                 }
 
                 return valueQuery.First().Value;
@@ -105,4 +104,5 @@ namespace Guson.Registry
             return from t in this.Items where t.Key.Equals(key) select t;
         }
     }
+#endif
 }

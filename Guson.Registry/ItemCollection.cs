@@ -8,6 +8,7 @@ namespace Guson.Registry
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
 
     /// <summary>Definition class that inherits the List generic class.</summary>
@@ -29,23 +30,16 @@ namespace Guson.Registry
         public ItemCollection(IEnumerable<T> collection)
         {
             Contract.Requires<ArgumentNullException>(collection != null, "collection cannot be null");
-            Contract.Requires<ArgumentNullException>(Contract.ForAll(collection, i => i != null), "items in collection cannot be null");
-            Contract.Ensures(Contract.ForAll(this.ToArray(), i => i != null));
-            this.Clear();
-            foreach (var item in collection)
+            if (collection != null)
             {
-                if (item != null)
+                foreach (var item in collection)
                 {
-                    this.Add(item);
+                    if (item != null)
+                    {
+                        this.Add(item);
+                    }
                 }
             }
-        }
-
-        /// <summary>Condition on an instance of the class.</summary>
-        [ContractInvariantMethod]
-        private void ContractInvariant()
-        {
-            Contract.Invariant(Contract.ForAll(this.ToArray(), i => i != null), "The items in collection cannot be null");
         }
     }
 }

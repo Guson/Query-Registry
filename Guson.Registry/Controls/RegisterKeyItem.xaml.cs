@@ -32,7 +32,7 @@ namespace Guson.Registry.Controls
         /// <summary>Initializes a new instance of the <see cref="RegisterKeyItem"/> class.</summary>
         public RegisterKeyItem()
         {
-            this.InitializeComponent();
+            ////this.InitializeComponent();
         }
 
         #region Properties
@@ -46,23 +46,38 @@ namespace Guson.Registry.Controls
 
             set
             {
-                Contract.Requires(value != null);
+                Contract.Requires<ArgumentNullException>(value != null, "value cannot be null");
                 this.SetItem(value);
             }
         }
 
         /// <summary>Gets or sets root key.</summary>
-        public OpenRegistryKey.RootKeyType RootKey
+        public RootKeyType RootKey
         {
-            get { return this.GetRootKey(); }
-            set { this.SetRootKey(value); }
+            get 
+            { 
+                return this.GetRootKey(); 
+            }
+
+            set 
+            {
+                this.SetRootKey(value); 
+            }
         }
 
         /// <summary>Gets or sets key name.</summary>
         public string KeyName
         {
-            get { return this.keyName.Text; }
-            set { this.SetKeyName(value); }
+            get 
+            { 
+                return this.GetKeyName(); 
+            }
+
+            set 
+            {
+                Contract.Requires<ArgumentNullException>(value != null, "value cannot be null");
+                this.SetKeyName(value); 
+            }
         }
         #endregion
 
@@ -77,21 +92,21 @@ namespace Guson.Registry.Controls
 
         /// <summary>Gets the root key.</summary>
         /// <returns>The root key.</returns>
-        private OpenRegistryKey.RootKeyType GetRootKey()
+        private RootKeyType GetRootKey()
         {
             if (this.rootKeys != null && this.rootKeys.Text != null)
             {
-                return (OpenRegistryKey.RootKeyType)Enum.Parse(typeof(OpenRegistryKey.RootKeyType), rootKeys.Text);
+                return (RootKeyType)Enum.Parse(typeof(RootKeyType), rootKeys.Text);
             }
             else
             {
-                return OpenRegistryKey.RootKeyType.HKLM;
+                return RootKeyType.HKLM;
             }
         }
 
         /// <summary>Sets root key.</summary>
         /// <param name="value">The value to set.</param>
-        private void SetRootKey(OpenRegistryKey.RootKeyType value)
+        private void SetRootKey(RootKeyType value)
         {
             if (this.rootKeys != null && this.rootKeys.Text != null)
             {
@@ -114,12 +129,15 @@ namespace Guson.Registry.Controls
         }
 
         /// <summary>Sets key name.</summary>
-        /// <param name="keyName">The keyName.</param>
+        /// <param name="name">The keyName.</param>
         /// <exception cref="ArgumentNullException">keyName is null</exception>
-        private void SetKeyName(string keyName)
+        private void SetKeyName(string name)
         {
-            Contract.Requires<ArgumentNullException>(keyName != null, "KeyName cannot be null");
-            this.KeyName = keyName;
+            Contract.Requires<ArgumentNullException>(name != null, "KeyName cannot be null");
+            if (name != null)
+            {
+                this.KeyName = name;
+            }
         }
 
         /// <summary>Set query item.</summary>

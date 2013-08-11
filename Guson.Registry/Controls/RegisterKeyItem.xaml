@@ -1,13 +1,16 @@
 ﻿<UserControl x:Class="Guson.Registry.Controls.RegisterKeyItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
-             d:DesignHeight="24" d:DesignWidth="368">
+             d:DesignHeight="24"
+             d:DesignWidth="368"
+             mc:Ignorable="d">
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="OpenKey.RootKeyType" MethodName="GetNames" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="RootKeyType"
+                            MethodName="GetNames"
+                            ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="VerticalAlignment" />
             </ObjectDataProvider.MethodParameters>
@@ -15,8 +18,14 @@
     </UserControl.Resources>
     <Grid>
         <WrapPanel>
-            <ComboBox x:Name="rootKeys" Margin="3,2,1,2" Width="60" ItemsSource="{Binding Source={StaticResource OpenKey.RootKeyType}}" />
-            <TextBox x:Name="keyName" Margin="1,2,2,2" Width="300" HorizontalAlignment="Stretch" />
+            <ComboBox x:Name="rootKeys"
+                      Width="60"
+                      Margin="3,2,1,2"
+                      ItemsSource="{Binding Source={StaticResource RootKeyType}}" />
+            <TextBox x:Name="keyName"
+                     Width="300"
+                     Margin="1,2,2,2"
+                     HorizontalAlignment="Stretch" />
         </WrapPanel>
     </Grid>
 </UserControl>

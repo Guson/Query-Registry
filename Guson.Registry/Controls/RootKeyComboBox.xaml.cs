@@ -21,11 +21,11 @@ namespace Guson.Registry.Controls
         /// <summary>Initializes a new instance of the <see cref="RootKeyComboBox"/> class.</summary>
         public RootKeyComboBox()
         {
-            this.InitializeComponent();
+            ////this.InitializeComponent();
         }
 
         /// <summary>Gets or sets root key.</summary>
-        public OpenRegistryKey.RootKeyType RootKey
+        public RootKeyType RootKey
         {
             get { return this.GetRootKey(); }
             set { this.SetRootKey(value); }
@@ -33,21 +33,21 @@ namespace Guson.Registry.Controls
 
         /// <summary>Gets the root key.</summary>
         /// <returns>The root key.</returns>
-        private OpenRegistryKey.RootKeyType GetRootKey()
+        private RootKeyType GetRootKey()
         {
             if (this.rootKeys != null && this.rootKeys.Text != null)
             {
-                return (OpenRegistryKey.RootKeyType)Enum.Parse(typeof(OpenRegistryKey.RootKeyType), rootKeys.Text);
+                return (RootKeyType)Enum.Parse(typeof(RootKeyType), rootKeys.Text);
             }
             else
             {
-                return OpenRegistryKey.RootKeyType.HKLM;
+                return RootKeyType.HKLM;
             }
         }
 
         /// <summary>Sets root key.</summary>
         /// <param name="value">The value to set.</param>
-        private void SetRootKey(OpenRegistryKey.RootKeyType value)
+        private void SetRootKey(RootKeyType value)
         {
             if (this.rootKeys != null && this.rootKeys.Text != null)
             {

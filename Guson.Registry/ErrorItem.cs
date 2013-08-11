@@ -27,12 +27,19 @@ namespace Guson.Registry
         public ErrorItem(RegistryKey key, string name, Exception ex)
         {
             Contract.Requires<ArgumentNullException>(key != null, "key cannot be null");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
+            Contract.Requires<ArgumentNullException>(key != null && !string.IsNullOrWhiteSpace(key.Name), "key.Name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(name), "name cannot be null, empty or contain only white space");
             Contract.Requires<ArgumentNullException>(ex != null, "ex cannot be null");
-            this.KeyName = key.Name;
+            if (key != null && !string.IsNullOrWhiteSpace(key.Name))
+            {
+                this.KeyName = key.Name;
+            }
+
             this.Name = name;
-            this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);
+            if (ex != null)
+            {
+                this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="ErrorItem"/> class. Create a new error item object.</summary>
@@ -47,7 +54,10 @@ namespace Guson.Registry
             Contract.Requires<ArgumentNullException>(ex != null, "ex cannot be null");
             this.KeyName = keyName;
             this.Name = name;
-            this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);
+            if (ex != null)
+            {
+                this.Error = ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : null);
+            }
         }
         #endregion
 

@@ -21,7 +21,7 @@ namespace Guson.Registry
         /// <param name="rootKey">The root key.</param>
         /// <param name="keyName">The registry key name.</param>
         /// <value>A new query item.</value>
-        public QueryItem(OpenRegistryKey.RootKeyType rootKey, string keyName)
+        public QueryItem(RootKeyType rootKey, string keyName)
         {
             Contract.Requires<ArgumentNullException>(keyName != null, "keyName cannot be null");
             this.RootKey = rootKey;
@@ -31,7 +31,7 @@ namespace Guson.Registry
 
         #region Value Properties
         /// <summary>Gets the root key for the query item.</summary>
-        public OpenRegistryKey.RootKeyType RootKey { get; private set; }
+        public RootKeyType RootKey { get; private set; }
 
         /// <summary>Gets the key name, can be empty or a part of a key for exclude items.</summary>
         public string KeyName { get; private set; }
