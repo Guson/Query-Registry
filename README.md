@@ -14,10 +14,10 @@ The _OpenRegistryKey_ is a static class to open a registry key.
 The _ItemCollection.cs_ encapsulate the *List* class, and is used in the item classes, _ErrorItem.cs, FilterItem.cs, QueryItem.cs, ResultItem.cs_. The _GlobalSuppressions.cs_ is only for Code Analysis.
 
 ## Controls
-The _RootKeyComboBox_ is a combo box for the _RootKeyType_ enum. The _RegisterKeyItem_ is a user control with a root key and key name.
+The _RootKeyComboBox_ is a combo box for the _RootKeyType_ enumeration. The _RegisterKeyItem_ is a user control with a root key and key name.
 
 ## Code documentation
-The XML documentation is used by a Sandcastle Help File Bulder project in the doc directory.
+The XML documentation is used by a Sandcastle Help File Builder project in the doc directory.
 
 ## Task list
 - [x] Add a [ContractInvariantMethod] to _ItemCollection.cs_, to require non null items.
